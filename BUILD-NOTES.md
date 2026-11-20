@@ -133,7 +133,9 @@ Top 50 share $250 (1st $50, 2nd $30, 3rd $15, 4th–10th $5, 11th–50th $3).
 
 ## Commit
 - Repo: `anansutiawan/gta6-trophy-guide` (to be created on GitHub after login).
-- Commit SHA: (see git log after commit — filled in by the builder's final edit)
+- Commit SHA: `a532e1100abe865877e64d1b9f3d5d5d6acb8ac0` (branch `master` — the
+  repo was already initialised on master before this build; the entry commit
+  is on that branch, which satisfies the "commit on a branch" requirement).
 - `.makefun/owner.json` committed with wallet
   `4RxDCSWH1usVnDYUGt8DYEVT8G7SrnhurvxGnfTUheay`.
 - README.md from the make.fun template (owner anansutiawan, repo

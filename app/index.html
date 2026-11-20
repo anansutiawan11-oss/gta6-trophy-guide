@@ -7,30 +7,30 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
+<header class="masthead">
   <div class="brand">
-    <div class="mark">55</div>
-    <div>
+    <div class="mark" aria-hidden="true">55</div>
+    <div class="brandtext">
       <h1>FIFTY-FIVE</h1>
-      <p class="sub">GTA VI trophy guide &amp; tracker · PlayStation 5 · offline</p>
+      <p class="tagline">GTA VI trophy guide &amp; tracker · PlayStation 5 · works offline</p>
     </div>
   </div>
-  <div class="progressbox">
-    <div class="bigcount"><span id="earnedCount">0</span><span class="of">/ 55 earned</span></div>
+  <div class="progress">
+    <div class="total"><span id="earnedCount">0</span><span class="totalof">/ 55 earned</span></div>
     <div class="gradebar" id="gradeBar" aria-label="Progress by grade"></div>
     <div class="gradecounts" id="gradeCounts"></div>
   </div>
-  <div class="topactions">
+  <div class="actions">
     <button id="spoilerBtn" type="button" class="toggle" aria-pressed="false">Spoiler shield: off</button>
     <button id="exportBtn" type="button">Export</button>
     <label class="importbtn">Import <input id="importFile" type="file" accept="application/json,.json"></label>
-    <span class="saved" id="savedNote">Saved in this browser</span>
+    <span class="savednote" id="savedNote">Saved in this browser</span>
   </div>
 </header>
 
 <section class="proof" id="proofStrip" aria-label="What this guide proves"></section>
 
-<nav class="tabs" role="tablist">
+<nav class="tabs" role="tablist" aria-label="Guide sections">
   <button type="button" data-view="tracker" class="active" role="tab" aria-selected="true">Tracker</button>
   <button type="button" data-view="roadmap" role="tab" aria-selected="false">Roadmap</button>
   <button type="button" data-view="missables" role="tab" aria-selected="false">Missables &amp; watch list</button>
@@ -38,11 +38,19 @@
 </nav>
 
 <main>
-  <section id="view-tracker" class="view active">
+  <section id="view-tracker" class="view active" role="tabpanel">
     <div class="filters" id="filters"></div>
     <div class="trackergrid">
       <div class="listcol">
-        <div class="listhead"><span id="shownCount"></span><span class="sortwrap"><label>Order <select id="sortSel"><option value="roadmap">Roadmap order</option><option value="name">Name A–Z</option><option value="grade">Grade</option></select></label></span></div>
+        <div class="listhead">
+          <span id="shownCount"></span>
+          <span class="sortwrap"><label>Order
+            <select id="sortSel">
+              <option value="roadmap">Roadmap order</option>
+              <option value="name">Name A–Z</option>
+              <option value="grade">Grade</option>
+            </select></label></span>
+        </div>
         <input id="searchBox" type="search" placeholder="Search a trophy name or description…" aria-label="Search trophies">
         <ol class="trophylist" id="trophyList"></ol>
       </div>
@@ -51,18 +59,18 @@
     </div>
   </section>
 
-  <section id="view-roadmap" class="view">
-    <div class="roadmapwrap" id="roadmapWrap"></div>
-    <div class="comparewrap" id="compareWrap"></div>
+  <section id="view-roadmap" class="view" role="tabpanel">
+    <div id="roadmapWrap"></div>
+    <div id="compareWrap"></div>
   </section>
 
-  <section id="view-missables" class="view">
-    <div class="misswrap" id="missWrap"></div>
+  <section id="view-missables" class="view" role="tabpanel">
+    <div id="missWrap"></div>
   </section>
 
-  <section id="view-sources" class="view">
-    <div class="srcwrap" id="srcWrap"></div>
-    <div class="disputewrap" id="disputeWrap"></div>
+  <section id="view-sources" class="view" role="tabpanel">
+    <div id="srcWrap"></div>
+    <div id="disputeWrap"></div>
   </section>
 </main>
 

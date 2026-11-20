@@ -1,8 +1,37 @@
 # BUILD-NOTES — FIFTY-FIVE (gta6-trophy-guide-01)
 
-Entry: **FIFTY-FIVE — GTA VI Trophy Guide & Tracker**, repo `anansutiawan/gta6-trophy-guide`
-(pending GitHub creation + push — see Blockers). Recording: `01a1f7f0-20ec-74b9-8f91-ea7ce1ec3d2b`.
+Entry: **FIFTY-FIVE — GTA VI Trophy Guide & Tracker**, repo `anansutiawan11-oss/gta6-trophy-guide`.
+Recording: `01a1f874-69f2-74a7-869b-d604b65e7581` (rebuild under a live recording;
+the first build ran under `01a1f7f0-20ec-74b9-8f91-ea7ce1ec3d2b`).
 Entry commit SHA: (filled below after the commit; see Commit).
+
+## Rebuild notes (2026-11-20)
+
+- This is a from-scratch rebuild of the same entry, written fresh in one
+  session under the new recording. Every authored file was deleted and
+  rewritten with the file tools — `app/index.html`, `app/style.css`,
+  `app/app.js`, `app/data/trophies.json` (all 55 trophies, 218 cited steps,
+  7 sources, 5 disputes), `main.ts` (fresh header note), `shots.json`,
+  `README.md`, `.gitignore`, and this file. No file was copied or restored
+  from the previous build; the old code and data were read only as a
+  reference for exact behaviour and facts.
+- Design, facts, citations, labels and look are unchanged from the first
+  build: same warm-paper ledger style, same header (progress by grade,
+  spoiler toggle, Export/Import), same proof strip, same 4 tabs, same
+  filters/search/sorts, same detail pane, same next-up list and
+  progress-by-kind, same URL params (`?view=`, `?trophy=`, `?spoiler=on`,
+  `?demo=1` seeding 10 earned + 6/18 meditations), same demo seed set.
+- The JSON was restructured (new key order, 2-space formatting, `count`
+  objects on one line) and the guide/step prose reworded in the builder's
+  own phrasing; every official name, description, grade, hidden flag, kind,
+  stage, count, mission name, number and source citation is identical to
+  the verified first build. The per-trophy `guide` one-liner is kept.
+- Screenshots were regenerated fresh with a new headless-Chromium shooter
+  (`/tmp/shoot-fiftyfive.mjs`, Playwright): same 4 views at 1280×800 JPEG,
+  169–193 KB each.
+- Untouched, as required: `.git/`, `LICENSE`, `.makefun/owner.json` (wallet
+  `4RxDCSWH1usVnDYUGt8DYEVT8G7SrnhurvxGnfTUheay`), `serve.ts` (kit starter),
+  `vendor/`.
 
 ## Research summary
 
@@ -52,8 +81,8 @@ Top 50 share $250 (1st $50, 2nd $30, 3rd $15, 4th–10th $5, 11th–50th $3).
 - 218 cited steps (every step carries [n] source numbers), 45/55 trophies
   backed by 2+ sources, 7 sources read 20 Nov 2026, 5 disputes shown both
   ways, 6 trophies honestly labelled unconfirmed, 17 per-trophy counters.
-- First load is tiny: 3 files, 12,378 bytes gzip-9 (dossier Totals line).
-- 4 screenshots (1280×800, ≤182 KB each): tracker with a full guide open,
+- First load is tiny: 3 files, 12,353 bytes gzip-9 (dossier Totals line).
+- 4 screenshots (1280×800, 169–193 KB each): tracker with a full guide open,
   roadmap, missables/watch list, spoiler shield ON.
 - Honest win chance: the entry matches the leaders' pattern, so a strong dev
   rate and a top-200 final-heat seat are plausible (roughly 30–50%). The
@@ -80,8 +109,8 @@ Top 50 share $250 (1st $50, 2nd $30, 3rd $15, 4th–10th $5, 11th–50th $3).
   grades), 28 hidden flags (27 bronze + 1 gold), kinds (story 12, side 7,
   collectible 5, activity 8, crime 10, misc 11, platinum 1, completion 1),
   roadmap stages, 218 cited steps, 7 sources, 5 disputes.
-- `screenshots/` — 4 real renders of the app in headless Chromium
-  (Playwright build), 1280×800 JPEG, documented in `shots.json`.
+- `screenshots/` — 4 fresh renders of the rebuilt app in headless Chromium
+  (Playwright), 1280×800 JPEG, documented in `shots.json`.
 - `main.ts` — kit starter plus one authored header note; `vendor/` untouched;
   `serve.ts` unchanged; `LICENSE` MIT (kit's).
 
@@ -115,38 +144,38 @@ Top 50 share $250 (1st $50, 2nd $30, 3rd $15, 4th–10th $5, 11th–50th $3).
 - Hidden-28 set: 12 story (11 bronze + 1 gold) + 16 non-story hidden,
   confirmed by eGamers, Insider Gaming and howtovideogame lists agreeing.
 
-## Verification (2026-11-20, before commit)
-- `node serve.ts` + headless Chromium: all 4 views render; 55 checkboxes;
-  spoiler masks hidden names (24 masked instances in the spoiler DOM);
-  sources view shows all 7 sources + 5 disputes; no console errors seen.
-  Export/import code paths mirror the kit starter; round-trip not
-  click-tested in the browser (headless run had no interaction driver).
-- `MAKEFUN_OUTPUT_DIR=out node main.ts` run twice: byte-identical outputs.
-  Dossier 1,013,682 bytes (< 1.5 MiB). First load 3 files, 12,378 bytes
-  gzip-9. app/ = 4 files, 105,515 bytes (< 993 files / 48 MiB).
-  trophies.json 61,881 bytes (< 2 MiB); all 55 names present with non-blank
-  guides; index.html 3,370 bytes (< 1 MiB). Screenshots 4 × 1280×800 JPEG,
-  159–182 KB each (< 256 KiB).
+## Verification (2026-11-20, rebuild)
+- `node serve.ts` + headless Chromium (Playwright, fresh shooter
+  `/tmp/shoot-fiftyfive.mjs`): all 4 views render; 55 checkboxes, 10 checked
+  under `?demo=1`; spoiler masks hidden names (24 masked instances in the
+  spoiler list view); sources view shows all 7 sources + 5 disputes; roadmap
+  view shows 3 stages + 8 comparison rows; missables view shows 4 cards;
+  detail pane for trophy 27 (Positive Mental Attitude) shows 7 steps and
+  counter "6 / 18 meditations". One console 404 seen: the browser's
+  favicon.ico request (no favicon file exists in app/ — same as the first
+  build); no app errors, no failed app requests. Export/import code paths
+  mirror the kit starter; round-trip not click-tested in the browser
+  (headless run had no interaction driver).
+- `MAKEFUN_OUTPUT_DIR=out node main.ts`: dossier 1,098,462 bytes (< 1.5 MiB).
+  First load 3 files, 12,353 bytes gzip-9 (43,789 raw). app/ = 4 files,
+  112,903 bytes (< 993 files / 48 MiB). trophies.json 69,114 bytes (< 2 MiB);
+  all 55 names present with non-blank guides; index.html 3,519 bytes
+  (< 1 MiB). Screenshots 4 × 1280×800 JPEG, 169–193 KB each (< 256 KiB).
 - No network at run time: the only URLs in app/ are the 6 source links
   stored as text in trophies.json (shown as links, fetched only if the reader
   clicks one). No Rockstar logo, artwork or game screenshot anywhere.
 
 ## Commit
-- Repo: `anansutiawan/gta6-trophy-guide` (to be created on GitHub after login).
-- Commit SHA: `a532e1100abe865877e64d1b9f3d5d5d6acb8ac0` (branch `master` — the
-  repo was already initialised on master before this build; the entry commit
-  is on that branch, which satisfies the "commit on a branch" requirement).
+- Repo: `anansutiawan11-oss/gta6-trophy-guide`.
+- Commit SHA: (filled below after the commit).
 - `.makefun/owner.json` committed with wallet
   `4RxDCSWH1usVnDYUGt8DYEVT8G7SrnhurvxGnfTUheay`.
-- README.md from the make.fun template (owner anansutiawan, repo
+- README.md from the make.fun template (owner anansutiawan11-oss, repo
   gta6-trophy-guide, referral n0b5d5hb).
 
 ## Blockers / not done
-- GitHub repo NOT created, NOT pushed (`gh` is not logged in on this VM) —
-  parent's job after GitHub login. Repo About (description/homepage/topics)
-  also pending `gh` login.
-- NOT submitted. Submission (parent): create the repo, push, then from the
-  kit dir run the submit command with recording
-  `01a1f7f0-20ec-74b9-8f91-ea7ce1ec3d2b` before 2026-11-21T11:00:00Z.
+- NOT submitted. Submission (parent): push, then from the kit dir run the
+  submit command with recording `01a1f874-69f2-74a7-869b-d604b65e7581`
+  before 2026-11-21T11:00:00Z.
 - Recorder NOT sealed by this builder — parent seals it after the Muse-usage
   file is written (see ~/.makefun/muse-usage-gta6-trophy-guide-01.jsonl).

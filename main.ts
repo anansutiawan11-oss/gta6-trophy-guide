@@ -1,6 +1,7 @@
-// Built for this entry (2026-11-20): app/ now holds FIFTY-FIVE, the full 55-trophy
-// guide and tracker — cited guides, roadmap, missables, spoiler shield — and
-// screenshots/ holds its four real renders. The plumbing below is the kit's, unchanged.
+// Rebuilt for this entry (2026-11-20, under recording 01a1f874-69f2-74a7-869b-d604b65e7581):
+// app/ now holds FIFTY-FIVE, the full 55-trophy guide and tracker — cited
+// guides, roadmap, missables, spoiler shield — and screenshots/ holds its
+// four fresh renders. The plumbing below is the kit's, unchanged.
 // A working gta6-trophy-guide-01 entry (Node 22, standard library only): the guide is this directory's app/ folder,
 // plain static files a browser opens at app/index.html (ES modules, CSS, no build step), offline: it loads nothing
 // over the network, and its trophy list and guides are app/data/trophies.json. The program hands it in: it copies app/

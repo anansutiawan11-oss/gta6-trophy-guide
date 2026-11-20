@@ -1,5 +1,5 @@
 /* FIFTY-FIVE — a field-ledger look: warm paper, dark ink, one coral accent.
-   No images, no web fonts, no network. Everything is system type. */
+   No images, no web fonts, no network. System type only. */
 * { box-sizing: border-box; }
 :root {
   --paper: #f6f1e6; --card: #fffdf6; --ink: #1e2a32; --muted: #5c6b74;
@@ -14,30 +14,30 @@ body { margin: 0; background: var(--paper); color: var(--ink);
 body, button, input, select { font-family: Georgia, 'Times New Roman', serif; }
 h1, h2, h3, .sans { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; }
 
-/* ---- top bar ---- */
-.topbar { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;
+/* masthead */
+.masthead { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap;
   padding: 18px 28px 14px; background: var(--ink); color: #f6f1e6; }
 .brand { display: flex; gap: 14px; align-items: center; }
 .mark { width: 58px; height: 58px; border: 3px solid #e8c15a; color: #e8c15a;
   display: grid; place-items: center; font-size: 26px; font-weight: 800;
   font-family: 'Segoe UI', system-ui, Arial, sans-serif; border-radius: 6px; }
 .brand h1 { margin: 0; font-size: 30px; letter-spacing: 3px; }
-.brand .sub { margin: 2px 0 0; color: #c9d4d6; font-size: 13.5px; font-style: italic; }
-.progressbox { min-width: 250px; }
-.bigcount { font-size: 30px; font-weight: 800; font-family: 'Segoe UI', system-ui, Arial, sans-serif; }
-.bigcount .of { font-size: 15px; font-weight: 400; color: #c9d4d6; margin-left: 6px; }
+.brand .tagline { margin: 2px 0 0; color: #c9d4d6; font-size: 13.5px; font-style: italic; }
+.progress { min-width: 250px; }
+.total { font-size: 30px; font-weight: 800; font-family: 'Segoe UI', system-ui, Arial, sans-serif; }
+.total .totalof { font-size: 15px; font-weight: 400; color: #c9d4d6; margin-left: 6px; }
 .gradebar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin: 8px 0 5px; background: #3a4a54; }
 .gradebar i { display: block; height: 100%; }
 .gradecounts { font-size: 13px; color: #c9d4d6; font-family: 'Segoe UI', system-ui, Arial, sans-serif; }
-.topactions { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.topactions button, .importbtn { background: #f6f1e6; color: var(--ink); border: 0;
+.actions { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.actions button, .importbtn { background: #f6f1e6; color: var(--ink); border: 0;
   padding: 9px 14px; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer;
   font-family: 'Segoe UI', system-ui, Arial, sans-serif; }
-.topactions button.toggle[aria-pressed="true"] { background: var(--coral); color: #fff; }
+.actions button.toggle[aria-pressed="true"] { background: var(--coral); color: #fff; }
 .importbtn input { display: none; }
-.saved { font-size: 12.5px; color: #9fb3b5; font-style: italic; }
+.savednote { font-size: 12.5px; color: #9fb3b5; font-style: italic; }
 
-/* ---- proof strip ---- */
+/* proof strip */
 .proof { display: flex; gap: 0; flex-wrap: wrap; background: var(--card);
   border-bottom: 2px solid var(--ink); padding: 0 28px; }
 .proof span { padding: 9px 16px 9px 0; margin-right: 16px; font-size: 14.5px;
@@ -46,7 +46,7 @@ h1, h2, h3, .sans { font-family: 'Segoe UI', system-ui, -apple-system, Arial, sa
 .proof b { color: var(--teal); }
 .proof .warn b { color: var(--coral); }
 
-/* ---- tabs ---- */
+/* tabs */
 .tabs { display: flex; gap: 6px; padding: 12px 28px 0; }
 .tabs button { background: transparent; border: 2px solid var(--ink); border-bottom: 0;
   border-radius: 8px 8px 0 0; padding: 9px 18px; font-size: 15px; font-weight: 700;
@@ -57,7 +57,7 @@ main { padding: 0 28px 20px; }
 .view { display: none; border-top: 2px solid var(--ink); padding-top: 14px; }
 .view.active { display: block; }
 
-/* ---- filters ---- */
+/* filter chips */
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .chip { border: 1.5px solid var(--ink); background: var(--card); border-radius: 999px;
   padding: 6px 13px; font-size: 14px; cursor: pointer; font-weight: 700;
@@ -65,7 +65,7 @@ main { padding: 0 28px 20px; }
 .chip.active { background: var(--teal); border-color: var(--teal); color: #fff; }
 .chip.warnchip.active { background: var(--coral); border-color: var(--coral); }
 
-/* ---- tracker layout ---- */
+/* tracker layout */
 .trackergrid { display: grid; grid-template-columns: 400px minmax(0, 1fr) 250px; gap: 16px; align-items: start; }
 .listhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
   font-family: 'Segoe UI', system-ui, Arial, sans-serif; font-size: 13.5px; color: var(--muted); }
@@ -96,7 +96,7 @@ main { padding: 0 28px 20px; }
 .gradechip.platinum { background: var(--plat); } .gradechip.gold { background: #b98a1d; }
 .gradechip.silver { background: var(--silv); } .gradechip.bronze { background: var(--brnz); }
 
-/* ---- detail pane ---- */
+/* detail pane */
 .detail { background: var(--card); border: 1.5px solid var(--line); border-radius: 8px;
   padding: 18px 20px; min-height: 400px; }
 .detail h2 { margin: 0 0 4px; font-size: 26px; line-height: 1.15; }
@@ -141,7 +141,7 @@ main { padding: 0 28px 20px; }
 .tag.kind { background: var(--teal-soft); color: var(--teal); }
 .tag.stage { background: #e8e2d4; color: #6b5d43; }
 
-/* ---- side column ---- */
+/* side column */
 .sidecol h3 { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
   color: var(--teal); margin: 0 0 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
 .sidecol .card { background: var(--card); border: 1.5px solid var(--line); border-radius: 8px;
@@ -156,7 +156,7 @@ main { padding: 0 28px 20px; }
 .kindrows .bar { display: inline-block; height: 8px; background: var(--teal-soft); border-radius: 4px; vertical-align: middle; margin-left: 6px; }
 .kindrows .bar i { display: block; height: 100%; background: var(--teal); border-radius: 4px; }
 
-/* ---- roadmap / missables / sources views ---- */
+/* roadmap / missables / sources views */
 .stagecard { background: var(--card); border: 1.5px solid var(--line); border-radius: 8px;
   padding: 16px 20px; margin-bottom: 14px; }
 .stagecard h2 { margin: 0 0 6px; font-size: 22px; }

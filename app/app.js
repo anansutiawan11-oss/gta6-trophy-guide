@@ -1,67 +1,79 @@
-// FIFTY-FIVE — GTA VI trophy guide & tracker. Static, offline, no network at run time.
-// Loads app/data/trophies.json, renders the tracker, roadmap, missables and sources
-// views, and keeps progress (earned ticks + per-trophy counters) in localStorage.
-const EARNED_KEY = 'fiftyfive-earned-v1';
-const COUNTS_KEY = 'fiftyfive-counts-v1';
-const SPOILER_KEY = 'fiftyfive-spoiler-v1';
+// FIFTY-FIVE — GTA VI trophy guide & tracker. Static and offline: no network
+// at run time. Loads app/data/trophies.json, renders tracker / roadmap /
+// missables / sources, and keeps earned ticks plus per-trophy counters in
+// localStorage.
+const KEY_EARNED = 'fiftyfive-earned-v1';
+const KEY_COUNTS = 'fiftyfive-counts-v1';
+const KEY_SPOILER = 'fiftyfive-spoiler-v1';
 
-const params = new URLSearchParams(location.search);
+const query = new URLSearchParams(location.search);
 const doc = await (await fetch('data/trophies.json')).json();
 const trophies = doc.trophies;
-const sourcesById = new Map(doc.sources.map((s) => [s.id, s]));
+const sourceById = new Map(doc.sources.map((s) => [s.id, s]));
 
-let earned = loadProgress(EARNED_KEY);
-let counts = loadProgress(COUNTS_KEY);
-let spoilerOn = localStorage.getItem(SPOILER_KEY) === '1';
-let filter = 'all';
+let earned = readStored(KEY_EARNED);
+let counts = readStored(KEY_COUNTS);
+let spoilerOn = localStorage.getItem(KEY_SPOILER) === '1';
+let activeFilter = 'all';
 let searchText = '';
 let sortMode = 'roadmap';
 let selected = 0;
-let view = 'tracker';
+let currentView = 'tracker';
 
-if (params.get('view') && ['tracker', 'roadmap', 'missables', 'sources'].includes(params.get('view'))) view = params.get('view');
-if (params.get('spoiler') === 'on') spoilerOn = true;
-if (params.get('demo') === '1' && earned.size === 0) seedDemoProgress();
-if (params.get('trophy') !== null) {
-  const i = Number(params.get('trophy'));
-  if (Number.isInteger(i) && i >= 0 && i < trophies.length) selected = i;
-}
+if (['tracker', 'roadmap', 'missables', 'sources'].includes(query.get('view'))) currentView = query.get('view');
+if (query.get('spoiler') === 'on') spoilerOn = true;
+if (query.get('demo') === '1' && earned.size === 0) seedDemo();
+const picked = Number(query.get('trophy'));
+if (query.get('trophy') !== null && Number.isInteger(picked) && picked >= 0 && picked < trophies.length) selected = picked;
 
-function loadProgress(key) {
+function readStored(key) {
   try {
     const raw = JSON.parse(localStorage.getItem(key) ?? 'null');
-    if (key === EARNED_KEY) return new Set(Array.isArray(raw) ? raw : []);
+    if (key === KEY_EARNED) return new Set(Array.isArray(raw) ? raw : []);
     return raw && typeof raw === 'object' ? raw : {};
-  } catch { return key === EARNED_KEY ? new Set() : {}; }
+  } catch {
+    return key === KEY_EARNED ? new Set() : {};
+  }
 }
 
-function saveProgress() {
-  localStorage.setItem(EARNED_KEY, JSON.stringify([...earned]));
-  localStorage.setItem(COUNTS_KEY, JSON.stringify(counts));
-  localStorage.setItem(SPOILER_KEY, spoilerOn ? '1' : '0');
+function persist() {
+  localStorage.setItem(KEY_EARNED, JSON.stringify([...earned]));
+  localStorage.setItem(KEY_COUNTS, JSON.stringify(counts));
+  localStorage.setItem(KEY_SPOILER, spoilerOn ? '1' : '0');
   document.getElementById('savedNote').textContent = 'Saved in this browser';
 }
 
-// Demo progress used only for the maker's screenshots (?demo=1): 10 earned,
-// a half-done meditation counter, and the Positive Mental Attitude guide open.
-function seedDemoProgress() {
+// Demo progress, only for the maker's screenshots (?demo=1): 10 earned,
+// a half-finished meditation counter, and the Positive Mental Attitude
+// guide open.
+function seedDemo() {
   earned = new Set([1, 2, 7, 19, 20, 34, 41, 45, 52, 53]);
   counts = { 27: 6 };
   selected = 27;
-  saveProgress();
+  persist();
 }
 
-function isMasked(t) {
+function masked(t) {
   return spoilerOn && t.hidden && !earned.has(trophies.indexOf(t));
 }
 
-function gradeLetter(g) { return { platinum: 'P', gold: 'G', silver: 'S', bronze: 'B' }[g]; }
+function gradeLetter(g) {
+  return { platinum: 'P', gold: 'G', silver: 'S', bronze: 'B' }[g];
+}
 
 function citeList(ids) {
   return ids.map((id) => {
-    const s = sourcesById.get(id);
+    const s = sourceById.get(id);
     return s ? `[${id}] ${s.name}` : `[${id}]`;
   }).join(' · ');
+}
+
+function fmt(n) {
+  return n >= 1000 ? n.toLocaleString('en-US') : String(n);
+}
+
+function onWatchList(t) {
+  return t.missable === 'possible' || t.note.startsWith('Watch list') || t.name === 'Strangers & Freaks';
 }
 
 function renderProofStrip() {
@@ -70,14 +82,14 @@ function renderProofStrip() {
   const hidden = trophies.filter((t) => t.hidden).length;
   const unconfirmed = trophies.filter((t) => t.note.includes('UNCONFIRMED')).length;
   const items = [
-    `<b>55/55</b> official name, description &amp; grade`,
+    '<b>55/55</b> official name, description &amp; grade',
     `<b>1P 2G 6S 46B</b> · <b>${hidden}</b> PSN-hidden`,
     `<b>55/55</b> guides cite sources · <b>${steps}</b> steps, all cited`,
     `<b>${twoPlus}</b> backed by 2+ sources`,
-    `<b>7</b> sources read 20 Nov 2026`,
+    '<b>7</b> sources read 20 Nov 2026',
     `<span class="warn"><b>1</b> possibly missable</span> · <b>${unconfirmed}</b> unconfirmed`,
-    `<b>5</b> disputes shown both ways`,
-    `<b>0</b> online trophies`,
+    '<b>5</b> disputes shown both ways',
+    '<b>0</b> online trophies',
   ];
   document.getElementById('proofStrip').innerHTML = items.map((x) => `<span>${x}</span>`).join('');
 }
@@ -89,31 +101,31 @@ const FILTERS = [
   ['watch', 'Watch list 8'], ['unconfirmed', 'Unconfirmed 6'], ['notearned', 'Not earned'],
 ];
 
-function isWatch(t) {
-  return t.missable === 'possible' || t.note.startsWith('Watch list') || t.name === 'Strangers & Freaks';
-}
-
 function renderFilterChips() {
   const box = document.getElementById('filters');
   box.replaceChildren();
   for (const [key, label] of FILTERS) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'chip' + (key === filter ? ' active' : '') + ((key === 'watch' || key === 'unconfirmed') ? ' warnchip' : '');
+    b.className = 'chip' + (key === activeFilter ? ' active' : '') + ((key === 'watch' || key === 'unconfirmed') ? ' warnchip' : '');
     b.textContent = label;
-    b.addEventListener('click', () => { filter = key; renderFilterChips(); renderTrophyList(); });
+    b.addEventListener('click', () => {
+      activeFilter = key;
+      renderFilterChips();
+      renderTrophyList();
+    });
     box.append(b);
   }
 }
 
-function filteredTrophies() {
+function visibleTrophies() {
   let list = trophies.map((t, i) => ({ t, i }));
-  if (filter === 'hidden') list = list.filter(({ t }) => t.hidden);
-  else if (filter === 'watch') list = list.filter(({ t }) => isWatch(t));
-  else if (filter === 'unconfirmed') list = list.filter(({ t }) => t.note.includes('UNCONFIRMED'));
-  else if (filter === 'notearned') list = list.filter(({ i }) => !earned.has(i));
-  else if (filter === 'online') list = [];
-  else if (filter !== 'all') list = list.filter(({ t }) => t.kind === filter);
+  if (activeFilter === 'hidden') list = list.filter(({ t }) => t.hidden);
+  else if (activeFilter === 'watch') list = list.filter(({ t }) => onWatchList(t));
+  else if (activeFilter === 'unconfirmed') list = list.filter(({ t }) => t.note.includes('UNCONFIRMED'));
+  else if (activeFilter === 'notearned') list = list.filter(({ i }) => !earned.has(i));
+  else if (activeFilter === 'online') list = [];
+  else if (activeFilter !== 'all') list = list.filter(({ t }) => t.kind === activeFilter);
   if (searchText) {
     const q = searchText.toLowerCase();
     list = list.filter(({ t }) => (t.name + ' ' + t.description).toLowerCase().includes(q));
@@ -127,7 +139,7 @@ function filteredTrophies() {
 }
 
 function renderTrophyList() {
-  const list = filteredTrophies();
+  const list = visibleTrophies();
   const ol = document.getElementById('trophyList');
   document.getElementById('shownCount').textContent = `${list.length} shown · ${earned.size} of 55 earned`;
   ol.replaceChildren();
@@ -146,29 +158,42 @@ function renderTrophyList() {
     const mid = document.createElement('div');
     const name = document.createElement('div');
     name.className = 'tname';
-    name.textContent = isMasked(t) ? 'Hidden trophy — earn it to reveal' : t.name;
+    name.textContent = masked(t) ? 'Hidden trophy — earn it to reveal' : t.name;
     const desc = document.createElement('div');
     desc.className = 'tdesc';
-    desc.textContent = isMasked(t) ? 'Hidden on PSN until earned.' : t.description;
+    desc.textContent = masked(t) ? 'Hidden on PSN until earned.' : t.description;
     const meta = document.createElement('div');
     meta.className = 'tmeta';
     meta.textContent = `${t.grade} · ${t.kind} · Stage ${t.stage} · ${t.sources.length} src`;
     if (t.missable === 'possible') {
-      const b = document.createElement('span'); b.className = 'badge miss'; b.textContent = 'POSSIBLY MISSABLE'; meta.append(b);
+      const b = document.createElement('span');
+      b.className = 'badge miss';
+      b.textContent = 'POSSIBLY MISSABLE';
+      meta.append(b);
     }
-    if (isWatch(t) && t.missable !== 'possible') {
-      const b = document.createElement('span'); b.className = 'badge watch'; b.textContent = 'WATCH'; meta.append(b);
+    if (onWatchList(t) && t.missable !== 'possible') {
+      const b = document.createElement('span');
+      b.className = 'badge watch';
+      b.textContent = 'WATCH';
+      meta.append(b);
     }
     if (t.note.includes('UNCONFIRMED')) {
-      const b = document.createElement('span'); b.className = 'badge unc'; b.textContent = 'UNCONFIRMED'; meta.append(b);
+      const b = document.createElement('span');
+      b.className = 'badge unc';
+      b.textContent = 'UNCONFIRMED';
+      meta.append(b);
     }
-    if (t.hidden && !isMasked(t)) {
-      const b = document.createElement('span'); b.className = 'badge hid'; b.textContent = 'PSN-HIDDEN'; meta.append(b);
+    if (t.hidden && !masked(t)) {
+      const b = document.createElement('span');
+      b.className = 'badge hid';
+      b.textContent = 'PSN-HIDDEN';
+      meta.append(b);
     }
     if (t.count) {
       const have = counts[i] ?? 0;
-      const b = document.createElement('span'); b.className = 'badge hid';
-      b.textContent = `${formatCount(have)} / ${formatCount(t.count.need)} ${t.count.label}`;
+      const b = document.createElement('span');
+      b.className = 'badge hid';
+      b.textContent = `${fmt(have)} / ${fmt(t.count.need)} ${t.count.label}`;
       meta.append(b);
     }
     mid.append(name, desc, meta);
@@ -178,11 +203,10 @@ function renderTrophyList() {
   }
 }
 
-function formatCount(n) { return n >= 1000 ? n.toLocaleString('en-US') : String(n); }
-
 function toggleEarned(i) {
-  if (earned.has(i)) earned.delete(i); else earned.add(i);
-  saveProgress();
+  if (earned.has(i)) earned.delete(i);
+  else earned.add(i);
+  persist();
   renderAll();
 }
 
@@ -199,17 +223,25 @@ function renderTrophyDetail() {
   const pane = document.getElementById('detailPane');
   pane.replaceChildren();
   const h2 = document.createElement('h2');
-  h2.textContent = isMasked(t) ? 'Hidden trophy' : t.name;
+  h2.textContent = masked(t) ? 'Hidden trophy' : t.name;
   pane.append(h2);
   const tags = document.createElement('div');
   tags.className = 'tagrow';
   for (const [label, cls] of [[t.grade, t.grade], [t.kind, 'kind'], [`Stage ${t.stage}`, 'stage']]) {
-    const s = document.createElement('span'); s.className = `tag ${cls}`; s.textContent = label; tags.append(s);
+    const s = document.createElement('span');
+    s.className = `tag ${cls}`;
+    s.textContent = label;
+    tags.append(s);
   }
-  if (t.hidden) { const s = document.createElement('span'); s.className = 'tag stage'; s.textContent = 'PSN-hidden'; tags.append(s); }
+  if (t.hidden) {
+    const s = document.createElement('span');
+    s.className = 'tag stage';
+    s.textContent = 'PSN-hidden';
+    tags.append(s);
+  }
   pane.append(tags);
 
-  if (isMasked(t)) {
+  if (masked(t)) {
     const call = document.createElement('div');
     call.className = 'callout note';
     call.innerHTML = '<b>Spoiler shield is on.</b> This trophy is hidden on PlayStation until earned, so its name, description and guide stay covered. Turn the shield off, or mark it earned, to read it.';
@@ -237,12 +269,25 @@ function renderTrophyDetail() {
       const have = counts[i] ?? 0;
       const row = document.createElement('div');
       row.className = 'counter';
-      const minus = document.createElement('button'); minus.type = 'button'; minus.textContent = '−';
-      minus.addEventListener('click', () => { counts[i] = Math.max(0, (counts[i] ?? 0) - (t.count.step ?? 1)); saveProgress(); renderAll(); });
-      const val = document.createElement('span'); val.className = 'countval';
-      val.textContent = `Your count — ${formatCount(have)} / ${formatCount(t.count.need)} ${t.count.label}`;
-      const plus = document.createElement('button'); plus.type = 'button'; plus.textContent = '+';
-      plus.addEventListener('click', () => { counts[i] = Math.min(t.count.need, (counts[i] ?? 0) + (t.count.step ?? 1)); saveProgress(); renderAll(); });
+      const minus = document.createElement('button');
+      minus.type = 'button';
+      minus.textContent = '−';
+      minus.addEventListener('click', () => {
+        counts[i] = Math.max(0, (counts[i] ?? 0) - (t.count.step ?? 1));
+        persist();
+        renderAll();
+      });
+      const val = document.createElement('span');
+      val.className = 'countval';
+      val.textContent = `Your count — ${fmt(have)} / ${fmt(t.count.need)} ${t.count.label}`;
+      const plus = document.createElement('button');
+      plus.type = 'button';
+      plus.textContent = '+';
+      plus.addEventListener('click', () => {
+        counts[i] = Math.min(t.count.need, (counts[i] ?? 0) + (t.count.step ?? 1));
+        persist();
+        renderAll();
+      });
       row.append(minus, val, plus);
       pane.append(row);
     }
@@ -292,7 +337,7 @@ function renderNextUp() {
     .sort((a, b) => a.t.stage - b.t.stage || a.i - b.i).slice(0, 6);
   for (const { t, i } of next) {
     const li = document.createElement('li');
-    li.textContent = isMasked(t) ? 'Hidden trophy' : t.name;
+    li.textContent = masked(t) ? 'Hidden trophy' : t.name;
     const meta = document.createElement('div');
     meta.className = 'nmeta';
     meta.textContent = `${t.grade} · Stage ${t.stage}` + (t.missable === 'possible' ? ' · possibly missable — do first' : '');
@@ -343,7 +388,6 @@ function renderProgress() {
     const got = trophies.filter((t, i) => t.grade === g && earned.has(i)).length;
     const seg = document.createElement('i');
     seg.style.width = `${(all / total) * 100}%`;
-    // Fill the grade's share left-to-right by how much of it is earned.
     const pct = all ? Math.round((got / all) * 100) : 0;
     seg.style.background = `linear-gradient(to right, ${colors[g]} ${pct}%, #55636c ${pct}%)`;
     seg.title = `${g}: ${got}/${all}`;
@@ -385,7 +429,7 @@ function renderRoadmapView() {
     const inStage = trophies.map((t, i) => ({ t, i })).filter(({ t }) => t.stage === stage.stage);
     const done = inStage.filter(({ i }) => earned.has(i)).length;
     list.innerHTML = `<b>${done}/${inStage.length} trophies in this stage earned.</b> ` +
-      inStage.map(({ t }) => isMasked(t) ? 'Hidden trophy' : t.name).join(' · ');
+      inStage.map(({ t }) => masked(t) ? 'Hidden trophy' : t.name).join(' · ');
     card.append(h2, p, list, src);
     wrap.append(card);
   }
@@ -407,7 +451,11 @@ function renderRoadmapView() {
   const tbody = document.createElement('tbody');
   for (const [item, a, b] of rows) {
     const tr = document.createElement('tr');
-    for (const cell of [item, a, b]) { const td = document.createElement('td'); td.textContent = cell; tr.append(td); }
+    for (const cell of [item, a, b]) {
+      const td = document.createElement('td');
+      td.textContent = cell;
+      tr.append(td);
+    }
     tbody.append(tr);
   }
   table.append(tbody);
@@ -424,12 +472,11 @@ function renderMissablesView() {
   head.className = 'sectionhead';
   head.textContent = 'Missables & watch list — one trophy can be missed, eight things deserve care';
   wrap.append(head);
-  const pma = trophies[27];
   const card = document.createElement('div');
   card.className = 'misscard';
   card.innerHTML = '<h2>Possibly missable: Positive Mental Attitude</h2>';
   const p = document.createElement('p');
-  p.textContent = 'The only trophy any guide flags as possibly missable. The Chapter 1 balcony meditation at Jason\'s house disappears when Chapter 1 ends, and whether the trophy needs it is still unconfirmed — PowerPyx\'s author did it and then earned the trophy. Safe play: do it the morning after Down to Earth. Sources: [2] [4] [5].';
+  p.textContent = "The only trophy any guide flags as possibly missable. The Chapter 1 balcony meditation at Jason's house disappears when Chapter 1 ends, and whether the trophy needs it is still unconfirmed — PowerPyx's author did it and then earned the trophy. Safe play: do it the morning after Down to Earth. Sources: [2] [4] [5].";
   card.append(p);
   wrap.append(card);
 
@@ -449,7 +496,7 @@ function renderMissablesView() {
   ];
   for (const [name, text] of items) {
     const li = document.createElement('li');
-    li.innerHTML = `<b></b> ${text}`;
+    li.innerHTML = '<b></b> ' + text;
     li.querySelector('b').textContent = name + ' —';
     ul.append(li);
   }
@@ -462,7 +509,7 @@ function renderMissablesView() {
   const ul2 = document.createElement('ul');
   for (const t of trophies.filter((x) => x.note.includes('UNCONFIRMED'))) {
     const li = document.createElement('li');
-    li.innerHTML = `<b></b> ${t.note}`;
+    li.innerHTML = '<b></b> ' + t.note;
     li.querySelector('b').textContent = t.name + ' —';
     ul2.append(li);
   }
@@ -480,7 +527,9 @@ function renderMissablesView() {
     'Hourglass quests are time-sensitive and fail — they are not relevant for trophies.',
     'The Irredeemable criminal profile is permanent and makes cops more aggressive. It does not block any trophy, but avoid it.',
   ]) {
-    const li = document.createElement('li'); li.textContent = text; ul3.append(li);
+    const li = document.createElement('li');
+    li.textContent = text;
+    ul3.append(li);
   }
   warn.append(ul3);
   wrap.append(warn);
@@ -503,7 +552,10 @@ function renderSourcesView() {
     card.append(h2, p);
     if (s.url) {
       const a = document.createElement('a');
-      a.href = s.url; a.textContent = s.url; a.target = '_blank'; a.rel = 'noopener';
+      a.href = s.url;
+      a.textContent = s.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
       card.append(a);
     }
     wrap.append(card);
@@ -540,7 +592,7 @@ function renderSourcesView() {
 }
 
 function setView(v) {
-  view = v;
+  currentView = v;
   for (const btn of document.querySelectorAll('.tabs button')) {
     const active = btn.dataset.view === v;
     btn.classList.toggle('active', active);
@@ -576,16 +628,16 @@ async function importProgress(file) {
         if (Number.isInteger(i) && i >= 0 && i < trophies.length && Number.isFinite(v)) counts[i] = v;
       }
     }
-    saveProgress();
+    persist();
     renderAll();
   } catch {
     document.getElementById('savedNote').textContent = 'Import failed — not a FIFTY-FIVE progress file';
   }
 }
 
-function applySpoilerShield() {
+function flipSpoiler() {
   spoilerOn = !spoilerOn;
-  saveProgress();
+  persist();
   renderAll();
 }
 
@@ -597,14 +649,20 @@ function renderAll() {
   renderNextUp();
 }
 
-document.getElementById('spoilerBtn').addEventListener('click', applySpoilerShield);
+document.getElementById('spoilerBtn').addEventListener('click', flipSpoiler);
 document.getElementById('exportBtn').addEventListener('click', exportProgress);
 document.getElementById('importFile').addEventListener('change', (e) => {
   if (e.target.files[0]) importProgress(e.target.files[0]);
   e.target.value = '';
 });
-document.getElementById('searchBox').addEventListener('input', (e) => { searchText = e.target.value; renderTrophyList(); });
-document.getElementById('sortSel').addEventListener('change', (e) => { sortMode = e.target.value; renderTrophyList(); });
+document.getElementById('searchBox').addEventListener('input', (e) => {
+  searchText = e.target.value;
+  renderTrophyList();
+});
+document.getElementById('sortSel').addEventListener('change', (e) => {
+  sortMode = e.target.value;
+  renderTrophyList();
+});
 for (const btn of document.querySelectorAll('.tabs button')) btn.addEventListener('click', () => setView(btn.dataset.view));
 
 document.getElementById('footMeta').textContent =
@@ -613,4 +671,4 @@ document.getElementById('footMeta').textContent =
 
 renderProofStrip();
 renderAll();
-setView(view);
+setView(currentView);

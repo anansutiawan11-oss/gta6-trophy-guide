@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FIFTY-FIVE — GTA VI Trophy Guide &amp; Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="mark">55</div>
+    <div>
+      <h1>FIFTY-FIVE</h1>
+      <p class="sub">GTA VI trophy guide &amp; tracker · PlayStation 5 · offline</p>
+    </div>
+  </div>
+  <div class="progressbox">
+    <div class="bigcount"><span id="earnedCount">0</span><span class="of">/ 55 earned</span></div>
+    <div class="gradebar" id="gradeBar" aria-label="Progress by grade"></div>
+    <div class="gradecounts" id="gradeCounts"></div>
+  </div>
+  <div class="topactions">
+    <button id="spoilerBtn" type="button" class="toggle" aria-pressed="false">Spoiler shield: off</button>
+    <button id="exportBtn" type="button">Export</button>
+    <label class="importbtn">Import <input id="importFile" type="file" accept="application/json,.json"></label>
+    <span class="saved" id="savedNote">Saved in this browser</span>
+  </div>
+</header>
+
+<section class="proof" id="proofStrip" aria-label="What this guide proves"></section>
+
+<nav class="tabs" role="tablist">
+  <button type="button" data-view="tracker" class="active" role="tab" aria-selected="true">Tracker</button>
+  <button type="button" data-view="roadmap" role="tab" aria-selected="false">Roadmap</button>
+  <button type="button" data-view="missables" role="tab" aria-selected="false">Missables &amp; watch list</button>
+  <button type="button" data-view="sources" role="tab" aria-selected="false">Sources &amp; disputes</button>
+</nav>
+
+<main>
+  <section id="view-tracker" class="view active">
+    <div class="filters" id="filters"></div>
+    <div class="trackergrid">
+      <div class="listcol">
+        <div class="listhead"><span id="shownCount"></span><span class="sortwrap"><label>Order <select id="sortSel"><option value="roadmap">Roadmap order</option><option value="name">Name A–Z</option><option value="grade">Grade</option></select></label></span></div>
+        <input id="searchBox" type="search" placeholder="Search a trophy name or description…" aria-label="Search trophies">
+        <ol class="trophylist" id="trophyList"></ol>
+      </div>
+      <article class="detail" id="detailPane" aria-live="polite"></article>
+      <aside class="sidecol" id="sideCol"></aside>
+    </div>
+  </section>
+
+  <section id="view-roadmap" class="view">
+    <div class="roadmapwrap" id="roadmapWrap"></div>
+    <div class="comparewrap" id="compareWrap"></div>
+  </section>
+
+  <section id="view-missables" class="view">
+    <div class="misswrap" id="missWrap"></div>
+  </section>
+
+  <section id="view-sources" class="view">
+    <div class="srcwrap" id="srcWrap"></div>
+    <div class="disputewrap" id="disputeWrap"></div>
+  </section>
+</main>
+
+<footer>
+  <p>FIFTY-FIVE is an independent fan-made guide. Grand Theft Auto, GTA and Rockstar Games are trademarks of their owners; no Rockstar logo, artwork or game screenshot is used here. Trophy names and descriptions are quoted as PlayStation publishes them; every guide step is written in our own words and cites its source. Works offline — nothing is fetched at run time.</p>
+  <p id="footMeta"></p>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>

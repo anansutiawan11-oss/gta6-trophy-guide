@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FIFTY-FIVE — GTA VI Trophy Guide &amp; Tracker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23241f1c'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23ff6f59' font-family='sans-serif' font-weight='bold'%3E55%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div>
+      <h1>FIFTY-FIVE</h1>
+      <p class="sub">GTA VI Trophy Guide &amp; Tracker — PlayStation 5 · 55 trophies · offline</p>
+    </div>
+    <div class="top-actions">
+      <label class="spoiler-toggle"><input type="checkbox" id="spoilerToggle"> Spoiler shield</label>
+      <button id="exportBtn" type="button">Export</button>
+      <button id="importBtn" type="button">Import</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+  </div>
+  <div class="wrap progress-row" id="gradeProgress" aria-label="Progress by grade"></div>
+  <div class="wrap total-row"><strong id="totalProgress">0 / 55 earned</strong><span id="platinumNote">Platinum: Vice Got a Price! — unlocks with the last trophy.</span></div>
+</header>
+
+<main class="wrap">
+  <section class="proof" id="proofStrip" aria-label="Proof strip"></section>
+
+  <nav class="tabs" role="tablist" aria-label="Guide sections">
+    <button class="tab active" data-view="tracker" role="tab" type="button">Tracker</button>
+    <button class="tab" data-view="roadmap" role="tab" type="button">Roadmap</button>
+    <button class="tab" data-view="missables" role="tab" type="button">Missables &amp; watch list</button>
+    <button class="tab" data-view="sources" role="tab" type="button">Sources &amp; disputes</button>
+  </nav>
+
+  <section id="view-tracker" class="view active">
+    <div class="toolbar">
+      <input type="search" id="searchBox" placeholder="Search trophies…" aria-label="Search trophies">
+      <select id="kindFilter" aria-label="Filter by kind">
+        <option value="all">All kinds</option>
+        <option value="story">Story</option>
+        <option value="missable">Missable</option>
+        <option value="collectible">Collectibles</option>
+        <option value="activity">Activities</option>
+        <option value="side">Side strands</option>
+        <option value="crime">Crime</option>
+        <option value="misc">Misc</option>
+        <option value="completion">100% completion</option>
+        <option value="platinum">Platinum</option>
+      </select>
+      <select id="sortBox" aria-label="Sort trophies">
+        <option value="roadmap">Sort: roadmap order</option>
+        <option value="name">Sort: name A–Z</option>
+        <option value="grade">Sort: grade</option>
+      </select>
+      <label class="only"><input type="checkbox" id="onlyRemaining"> Remaining only</label>
+    </div>
+    <div class="tracker-grid">
+      <div>
+        <p class="count-line" id="countLine"></p>
+        <ul class="trophy-list" id="trophyList"></ul>
+        <section class="nextup">
+          <h2>Next up</h2>
+          <ol id="nextUpList"></ol>
+        </section>
+        <section class="bykind">
+          <h2>Progress by kind</h2>
+          <div id="kindProgress"></div>
+        </section>
+      </div>
+      <aside class="detail" id="detailPane" aria-live="polite">
+        <p class="detail-empty">Pick a trophy to see its full guide.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="view-roadmap" class="view">
+    <h2>Roadmap to the platinum</h2>
+    <p class="lede">Three stages, about 200 hours by the most-cited estimate — see dispute D1 for the 300-hour figure. One playthrough is enough; there are no online trophies.</p>
+    <div id="roadmapStages"></div>
+  </section>
+
+  <section id="view-missables" class="view">
+    <h2>Missables &amp; watch list</h2>
+    <p class="lede">Only one trophy is reported as possibly missable. The rest of this list is things to do early or be careful about, not hard missables.</p>
+    <div id="watchList"></div>
+    <h3>Missable trophies</h3>
+    <div id="missableCards"></div>
+    <h3>Unconfirmed trophies</h3>
+    <p class="lede">Six trophies whose method no guide has verified yet. Their steps below are honest about that — do not chase a guessed method.</p>
+    <div id="unconfirmedCards"></div>
+  </section>
+
+  <section id="view-sources" class="view">
+    <h2>Sources &amp; disputes</h2>
+    <p class="lede">Every guide step in this app cites one of these seven launch-week sources by number. Where the sources disagree, both sides are shown here instead of silently picking one.</p>
+    <ol class="source-list" id="sourceList"></ol>
+    <h3>Disputes — both sides</h3>
+    <div id="disputeList"></div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>Unofficial fan-made guide. No Rockstar Games artwork, logos, or game screenshots are used anywhere in this app. Trophy names and descriptions follow the published launch-week trophy lists; guide steps are written in the author's own words and cite their sources.</p>
+  <p>Game released 19 November 2026. Research checked 20 November 2026 — launch week, so unconfirmed entries may change as guides verify them.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

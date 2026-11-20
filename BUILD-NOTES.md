@@ -167,7 +167,7 @@ Top 50 share $250 (1st $50, 2nd $30, 3rd $15, 4th–10th $5, 11th–50th $3).
 
 ## Commit
 - Repo: `anansutiawan11-oss/gta6-trophy-guide`.
-- Commit SHA: (filled below after the commit).
+- Commit SHA: `df8d2b6` (branch `master`, on top of `7e7214c`).
 - `.makefun/owner.json` committed with wallet
   `4RxDCSWH1usVnDYUGt8DYEVT8G7SrnhurvxGnfTUheay`.
 - README.md from the make.fun template (owner anansutiawan11-oss, repo
